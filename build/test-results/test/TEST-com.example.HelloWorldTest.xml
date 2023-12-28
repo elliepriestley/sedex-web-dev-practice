@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.example.HelloWorldTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-12-28T12:32:14" hostname="Ellies-MBP" time="0.038">
+  <properties/>
+  <testcase name="Hello test()" classname="com.example.HelloWorldTest" time="0.038"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

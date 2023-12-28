@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test
 class HelloWorldTest {
 
     @Test
-    fun `Ping test`() {
-        assertEquals(Response(OK).body("pong"), app(Request(GET, "/ping")))
+    fun `Hello test`() {
+        assertEquals(Response(OK).body("Hello"), app(Request(GET, "/hello")))
     }
 
 }

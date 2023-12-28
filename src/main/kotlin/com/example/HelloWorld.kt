@@ -12,8 +12,8 @@ import org.http4k.server.SunHttp
 import org.http4k.server.asServer
 
 val app: HttpHandler = routes(
-    "/ping" bind GET to {
-        Response(OK).body("pong")
+    "/hello" bind GET to {
+        Response(OK).body("Hello")
     }
 )
 
