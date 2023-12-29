@@ -6,6 +6,7 @@ import org.http4k.core.Response
 import org.http4k.core.Request
 import org.http4k.core.Status.Companion.OK
 import org.http4k.lens.Query
+import org.http4k.lens.Path
 import org.http4k.core.then
 import org.http4k.lens.string
 import org.http4k.filter.DebuggingFilters.PrintRequest
@@ -15,14 +16,25 @@ import org.http4k.server.SunHttp
 import org.http4k.server.asServer
 
 val optionalQuery = Query.string().optional("name")
+val locale = Path.string().of("locale")
 
 val app: HttpHandler = routes(
-    "/hello" bind GET to { request: Request ->
-        val name: String? = optionalQuery(request)
+    "/{locale}/hello" bind GET to { req ->
+        val locale: String = locale(req)
+        val name: String? = optionalQuery(req)
+
         if (name.isNullOrEmpty()) {
             Response(OK).body("Hello")
         } else {
-            Response(OK).body("Hello, $name")
+            when (locale) {
+                "en-US" -> Response(OK).body("Hello, $name")
+                "fr-FR" -> Response(OK).body("Bonjour $name")
+                "en-AU" -> Response(OK).body("G'day $name")
+                "it-IT" -> Response(OK).body("Salve $name")
+                "en-UK" -> Response(OK).body("Alright, $name?")
+                else ->  Response(OK).body("I don't know what language you speak but Hello, $name")
+            }
+
         }
 
     }

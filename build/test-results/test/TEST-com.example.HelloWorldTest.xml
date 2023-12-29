@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.HelloWorldTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2023-12-28T15:41:55" hostname="Ellies-MBP" time="0.033">
+<testsuite name="com.example.HelloWorldTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2023-12-29T10:50:21" hostname="Ellies-MBP" time="0.042">
   <properties/>
-  <testcase name="Test that hello endpoint returns Hello when no name parameter is used()" classname="com.example.HelloWorldTest" time="0.031"/>
-  <testcase name="Test that hello endpoint accepts optional name param and uses it in response when available()" classname="com.example.HelloWorldTest" time="0.002"/>
+  <testcase name="Test that endpoint has a path variable that responds with hello from supported languages()" classname="com.example.HelloWorldTest" time="0.038"/>
+  <testcase name="Test that hello endpoint returns Hello when no name parameter is used()" classname="com.example.HelloWorldTest" time="0.0"/>
+  <testcase name="Test that hello endpoint accepts optional name param and uses it in response when available()" classname="com.example.HelloWorldTest" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
