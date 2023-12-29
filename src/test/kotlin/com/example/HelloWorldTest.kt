@@ -4,6 +4,7 @@ import org.http4k.core.Method.GET
 import org.http4k.core.Request
 import org.http4k.core.Response
 import org.http4k.core.Status.Companion.OK
+import org.http4k.hamkrest.hasStatus
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -31,5 +32,37 @@ class HelloWorldTest {
         assertEquals(Response(OK).body("Alright, Ellie?"), app(Request(GET, "/en-UK/hello?name=Ellie")))
         assertEquals(Response(OK).body("I don't know what language you speak but hello, Ellie"), app(Request(GET, "/en-HA/hello?name=Ellie")))
     }
+
+    @Test
+    fun `Test that echo_headers endpoint returns list of all request headers in response`() {
+        val headersKeys: List<String> = listOf(
+                "Accept-encoding",
+                "Sec-ch-ua",
+                "Accept",
+                "Sec-fetch-dest",
+                "Sec-fetch-user",
+                "Connection",
+                "Host",
+                "Sec-fetch-site",
+                "Sec-ch-ua-platform",
+                "Sec-fetch-mode",
+                "User-agent",
+                "Accept-language",
+                "Upgrade-insecure-requests",
+               "Sec-ch-ua-mobile",
+                "Cache-control")
+
+        val requestWithHeaders = Request(GET, "/echo_headers").header("Accept-encoding", "")
+            .header("Sec-ch-ua", "") .header("Accept", "") .header("Sec-fetch-dest", "")
+            .header("Sec-fetch-user", "") .header("Connection", "") .header("Host", "")
+            .header("Sec-fetch-site", "") .header("Sec-ch-ua-platform", "") .header("Sec-fetch-mode", "")
+            .header("User-agent", "") .header("Accept-language", "") .header("Upgrade-insecure-requests", "")
+            .header("Sec-ch-ua-mobile", "") .header("Cache-control", "")
+
+        val actualResponse = app(requestWithHeaders)
+        val actualHeaderKeys = actualResponse.bodyString().split("\n")
+        assertEquals(headersKeys.sorted(), actualHeaderKeys.sorted())
+    }
+
 
 }

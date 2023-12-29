@@ -1,13 +1,10 @@
 package com.example
 
-import org.http4k.core.HttpHandler
+import org.http4k.core.*
 import org.http4k.core.Method.GET
-import org.http4k.core.Response
-import org.http4k.core.Request
 import org.http4k.core.Status.Companion.OK
 import org.http4k.lens.Query
 import org.http4k.lens.Path
-import org.http4k.core.then
 import org.http4k.lens.string
 import org.http4k.filter.DebuggingFilters.PrintRequest
 import org.http4k.routing.bind
@@ -34,9 +31,12 @@ val app: HttpHandler = routes(
                 "en-UK" -> Response(OK).body("Alright, $name?")
                 else ->  Response(OK).body("I don't know what language you speak but hello, $name")
             }
-
         }
-
+    },
+    "/echo_headers" bind GET to { req ->
+        val headers: Headers = req.headers
+        val headerString = headers.joinToString("\n") { it.first }
+        Response(OK).body(headerString)
     }
 )
 
