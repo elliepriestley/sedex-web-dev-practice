@@ -61,6 +61,8 @@ class HelloWorldTest {
 
         val actualResponse = app(requestWithHeaders)
         val actualHeaderKeys = actualResponse.bodyString().split("\n")
+
+        assertEquals(actualResponse.status, OK)
         assertEquals(headersKeys.sorted(), actualHeaderKeys.sorted())
     }
 
