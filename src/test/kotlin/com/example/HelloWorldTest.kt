@@ -29,6 +29,7 @@ class HelloWorldTest {
         assertEquals(Response(OK).body("G'day Ellie"), app(Request(GET, "/en-AU/hello?name=Ellie")))
         assertEquals(Response(OK).body("Salve Ellie"), app(Request(GET, "/it-IT/hello?name=Ellie")))
         assertEquals(Response(OK).body("Alright, Ellie?"), app(Request(GET, "/en-UK/hello?name=Ellie")))
+        assertEquals(Response(OK).body("I don't know what language you speak but hello, Ellie"), app(Request(GET, "/en-HA/hello?name=Ellie")))
     }
 
 }

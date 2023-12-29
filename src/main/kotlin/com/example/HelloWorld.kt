@@ -32,7 +32,7 @@ val app: HttpHandler = routes(
                 "en-AU" -> Response(OK).body("G'day $name")
                 "it-IT" -> Response(OK).body("Salve $name")
                 "en-UK" -> Response(OK).body("Alright, $name?")
-                else ->  Response(OK).body("I don't know what language you speak but Hello, $name")
+                else ->  Response(OK).body("I don't know what language you speak but hello, $name")
             }
 
         }
