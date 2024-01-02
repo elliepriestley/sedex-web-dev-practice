@@ -36,7 +36,19 @@ val app: HttpHandler = routes(
     "/echo_headers" bind GET to { req ->
         val headers: Headers = req.headers
         val headerString = headers.joinToString("\n") { it.first }
-        Response(OK).body(headerString)
+
+//        if ("json" in headers["Accept"] )
+//        Response(OK).body(headerString)
+        val acceptValuePair = headers.find{it.first == "Accept"}.toString()
+
+        if (acceptValuePair.contains("json")) {
+            Response(OK).body("contains json")
+        } else {
+            Response(OK).body("does not accept json")
+        }
+
+//        Response(OK).body(acceptValuePair)
+
     }
 )
 
