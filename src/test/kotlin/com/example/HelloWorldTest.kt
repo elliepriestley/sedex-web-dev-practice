@@ -37,21 +37,21 @@ class HelloWorldTest {
     @Test
     fun `Test that echo_headers endpoint returns list of all request headers in response`() {
         val headersKeys: List<String> = listOf(
-                "Accept-encoding",
-                "Sec-ch-ua",
-                "Accept",
-                "Sec-fetch-dest",
-                "Sec-fetch-user",
-                "Connection",
-                "Host",
-                "Sec-fetch-site",
-                "Sec-ch-ua-platform",
-                "Sec-fetch-mode",
-                "User-agent",
-                "Accept-language",
-                "Upgrade-insecure-requests",
-               "Sec-ch-ua-mobile",
-                "Cache-control")
+                "Accept-encoding: ",
+                "Sec-ch-ua: ",
+                "Accept: ",
+                "Sec-fetch-dest: ",
+                "Sec-fetch-user: ",
+                "Connection: ",
+                "Host: ",
+                "Sec-fetch-site: ",
+                "Sec-ch-ua-platform: ",
+                "Sec-fetch-mode: ",
+                "User-agent: ",
+                "Accept-language: ",
+                "Upgrade-insecure-requests: ",
+               "Sec-ch-ua-mobile: ",
+                "Cache-control: ")
 
         val requestWithHeaders = Request(GET, "/echo_headers").header("Accept-encoding", "")
             .header("Sec-ch-ua", "") .header("Accept", "") .header("Sec-fetch-dest", "")
