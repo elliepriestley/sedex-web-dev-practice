@@ -11,9 +11,14 @@ import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.http4k.server.SunHttp
 import org.http4k.server.asServer
+import org.http4k.core.Body
+import org.http4k.format.Jackson.auto
+
 
 val optionalQuery = Query.string().optional("name")
 val locale = Path.string().of("locale")
+data class JSONHeaderData(val headers: Map<String, String?>)
+val headerLens = Body.auto<JSONHeaderData>().toLens()
 
 val app: HttpHandler = routes(
     "/{locale}/hello" bind GET to { req ->
@@ -35,19 +40,18 @@ val app: HttpHandler = routes(
     },
     "/echo_headers" bind GET to { req ->
         val headers: Headers = req.headers
-        val headerString = headers.joinToString("\n") { it.first }
+        val headerString = headers.joinToString("\n") { "${it.first}: ${it.second}"}
+        val headerJSON = JSONHeaderData(headers.toMap())
 
-//        if ("json" in headers["Accept"] )
-//        Response(OK).body(headerString)
         val acceptValuePair = headers.find{it.first == "Accept"}.toString()
 
         if (acceptValuePair.contains("json")) {
-            Response(OK).body("contains json")
-        } else {
-            Response(OK).body("does not accept json")
-        }
+            val response = Response(OK)
+            headerLens.inject(headerJSON, response)
 
-//        Response(OK).body(acceptValuePair)
+        } else {
+            Response(OK).body(headerString)
+        }
 
     }
 )
@@ -59,3 +63,4 @@ fun main() {
 
     println("Server started on " + server.port())
 }
+

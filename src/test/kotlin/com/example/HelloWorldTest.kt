@@ -6,6 +6,7 @@ import org.http4k.core.Response
 import org.http4k.core.Status.Companion.OK
 import org.http4k.hamkrest.hasStatus
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 class HelloWorldTest {
@@ -64,6 +65,12 @@ class HelloWorldTest {
 
         assertEquals(actualResponse.status, OK)
         assertEquals(headersKeys.sorted(), actualHeaderKeys.sorted())
+    }
+
+    @Disabled
+    @Test
+    fun `Test that echo_headers endpoint recognises whether json is accepted`() {
+        assertEquals(Response(OK).body("does not accept json"), app(Request(GET, "echo_headers")))
     }
 
 

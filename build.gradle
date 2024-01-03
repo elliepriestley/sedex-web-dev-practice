@@ -32,7 +32,9 @@ test {
 
 dependencies {
     implementation("org.http4k:http4k-core:${http4kVersion}")
+    implementation(platform("org.http4k:http4k-bom:5.12.0.0"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}")
+    implementation("org.http4k:http4k-format-jackson")
     testImplementation("org.http4k:http4k-testing-approval:${http4kVersion}")
     testImplementation("org.http4k:http4k-testing-hamkrest:${http4kVersion}")
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
