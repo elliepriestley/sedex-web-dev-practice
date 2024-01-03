@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.HelloWorldTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-01-03T16:37:34" hostname="Ellies-MBP" time="0.099">
+<testsuite name="com.example.HelloWorldTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2024-01-03T17:23:27" hostname="Ellies-MBP" time="0.252">
   <properties/>
-  <testcase name="Test that echo_headers endpoint returns list of all request headers in response()" classname="com.example.HelloWorldTest" time="0.099"/>
+  <testcase name="Test that echo_headers endpoint recognises whether json is accepted()" classname="com.example.HelloWorldTest" time="0.244"/>
+  <testcase name="Test that echo_headers endpoint returns list of all request headers in response()" classname="com.example.HelloWorldTest" time="0.001"/>
+  <testcase name="Test that endpoint has a path variable that responds with hello from supported languages()" classname="com.example.HelloWorldTest" time="0.004"/>
+  <testcase name="Test that hello endpoint returns Hello when no name parameter is used()" classname="com.example.HelloWorldTest" time="0.0"/>
+  <testcase name="Test that hello endpoint accepts optional name param and uses it in response when available()" classname="com.example.HelloWorldTest" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

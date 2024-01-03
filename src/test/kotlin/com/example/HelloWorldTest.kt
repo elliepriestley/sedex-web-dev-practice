@@ -1,12 +1,11 @@
 package com.example
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.http4k.core.Method.GET
 import org.http4k.core.Request
 import org.http4k.core.Response
 import org.http4k.core.Status.Companion.OK
-import org.http4k.hamkrest.hasStatus
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 class HelloWorldTest {
@@ -67,10 +66,30 @@ class HelloWorldTest {
         assertEquals(headersKeys.sorted(), actualHeaderKeys.sorted())
     }
 
-    @Disabled
+
     @Test
-    fun `Test that echo_headers endpoint recognises whether json is accepted`() {
-        assertEquals(Response(OK).body("does not accept json"), app(Request(GET, "echo_headers")))
+    fun `Test that echo_headers endpoint returns json object when Accept heading contains json, and string object otherwise`() {
+        val requestWithHeaders = Request(GET, "/echo_headers").header("Accept", "")
+        val requestWithHeadersThatAcceptsJSON = Request(GET, "/echo_headers").header("Accept", "application/json")
+            .header("Content Type", "")
+
+        val responseThatDoesNotAcceptJSON = app(requestWithHeaders)
+        val responseThatAcceptsJSON = app(requestWithHeadersThatAcceptsJSON)
+
+        // Assert the JSON type response
+        assertEquals(responseThatAcceptsJSON.status, OK)
+        // uses the objectMapper from the Jackson lib to parse the body into a JSON object.
+        // assert it's not null, as if the body is not a valid JSON string, the readValue function will throw an IOException.
+        val objectMapper = ObjectMapper()
+        val jsonObject = objectMapper.readValue(responseThatAcceptsJSON.bodyString(), Map::class.java)
+        assertNotNull(jsonObject)
+
+        // Assert the string type response
+        assertEquals(responseThatDoesNotAcceptJSON.status, OK)
+        assertInstanceOf(String::class.java, responseThatDoesNotAcceptJSON.bodyString())
+
+
+
     }
 
 
