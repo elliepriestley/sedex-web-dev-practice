@@ -42,21 +42,19 @@ val app: HttpHandler = routes(
     },
     "/echo_headers" bind GET to { req ->
         val prefix = Query.optional("as_response_headers_with_prefix").extract(req)?.substringAfter("=")
-        var headers: Headers = req.headers
-        val headerString = headers.joinToString("\n") { "${it.first}: ${it.second}"}
-        val headerJSON = JSONHeaderData(headers.toMap())
+        val headerString = req.headers.joinToString("\n") { "${it.first}: ${it.second}"}
+        val headerJSON = JSONHeaderData(req.headers.toMap())
 
-        val acceptValuePair = headers.find{it.first == "Accept"}.toString()
+        val acceptValuePair = req.headers.find{it.first == "Accept"}.toString()
 
         if (prefix != null) {
-            val response = Response(OK)
-            response.body(prefix.toString())
-//            stringHeaderLens.inject(headers.toString(), response)
-//            stringHeaderLens.inject(prefix, response)
+            val response = Response(OK).body("").headers(req.headers)
+            response
+
+
 
         } else if (acceptValuePair.contains("json")) {
-            val response = Response(OK)
-            jsonHeaderLens.inject(headerJSON, response)
+            jsonHeaderLens.inject(headerJSON, Response(OK))
 
         } else {
             Response(OK).body(headerString)
