@@ -87,10 +87,17 @@ class HelloWorldTest {
         // Assert the string type response
         assertEquals(responseThatDoesNotAcceptJSON.status, OK)
         assertInstanceOf(String::class.java, responseThatDoesNotAcceptJSON.bodyString())
-
-
-
     }
+
+    @Test
+    fun `Test that in the case that the prefix is not null, echo_headers endpoint with a query parameter returns empty response body`() {
+        assertEquals(Response(OK).body(""), app(Request(GET, "http://localhost:9000/echo_headers?as_response_headers_with_prefix=X-Echo-")))
+        assertEquals(Response(OK).body(""), app(Request(GET, "http://localhost:9000/echo_headers?as_response_headers_with_prefix=Y-Echo-")))
+        assertEquals(Response(OK).body(""), app(Request(GET, "http://localhost:9000/echo_headers?as_response_headers_with_prefix=TEST")))
+        assertEquals(Response(OK).body(""), app(Request(GET, "http://localhost:9000/echo_headers?as_response_headers_with_prefix=AnotherTest")))
+        assertEquals(Response(OK).body(""), app(Request(GET, "http://localhost:9000/echo_headers?as_response_headers_with_prefix=10000")))
+    }
+
 
 
 }
