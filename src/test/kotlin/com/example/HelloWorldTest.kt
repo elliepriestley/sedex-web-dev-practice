@@ -1,12 +1,17 @@
 package com.example
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.natpryce.hamkrest.and
+import com.natpryce.hamkrest.assertion.assertThat
 import org.http4k.core.Method.GET
 import org.http4k.core.Request
 import org.http4k.core.Response
 import org.http4k.core.Status.Companion.OK
+import org.http4k.hamkrest.hasHeader
+import org.http4k.hamkrest.hasStatus
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+
 
 class HelloWorldTest {
 
@@ -96,6 +101,20 @@ class HelloWorldTest {
         assertEquals(Response(OK).body(""), app(Request(GET, "http://localhost:9000/echo_headers?as_response_headers_with_prefix=TEST")))
         assertEquals(Response(OK).body(""), app(Request(GET, "http://localhost:9000/echo_headers?as_response_headers_with_prefix=AnotherTest")))
         assertEquals(Response(OK).body(""), app(Request(GET, "http://localhost:9000/echo_headers?as_response_headers_with_prefix=10000")))
+    }
+
+    @Test
+    fun `Test that when echo_headers endpoint accepts a query param, request headers are echoed back as response headers but with given prefix attached to header name`() {
+        val requestWithHeaders = Request(GET, "http://localhost:9000/echo_headers?as_response_headers_with_prefix=X-Echo-")
+            .header("X-Custom-Header", "some x value")
+            .header("Y-Custom-Header", "some y value")
+
+        val actualResponse: Response = app(requestWithHeaders)
+
+        assertThat(actualResponse, hasStatus(OK)
+            .and(hasHeader("X-Echo-X-Custom-Header", "some x value"))
+            .and(!hasHeader("X-Echo-Y-Custom-Header")))
+
     }
 
 
