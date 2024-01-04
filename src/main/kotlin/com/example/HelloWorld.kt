@@ -13,12 +13,14 @@ import org.http4k.server.SunHttp
 import org.http4k.server.asServer
 import org.http4k.core.Body
 import org.http4k.format.Jackson.auto
+import org.http4k.routing.header
 
 
 val optionalQuery = Query.string().optional("name")
 val locale = Path.string().of("locale")
 data class JSONHeaderData(val headers: Map<String, String?>)
-val headerLens = Body.auto<JSONHeaderData>().toLens()
+val jsonHeaderLens = Body.auto<JSONHeaderData>().toLens()
+val stringHeaderLens = Body.auto<String>().toLens()
 
 val app: HttpHandler = routes(
     "/{locale}/hello" bind GET to { req ->
@@ -39,15 +41,22 @@ val app: HttpHandler = routes(
         }
     },
     "/echo_headers" bind GET to { req ->
-        val headers: Headers = req.headers
+        val prefix = Query.optional("as_response_headers_with_prefix").extract(req)?.substringAfter("=")
+        var headers: Headers = req.headers
         val headerString = headers.joinToString("\n") { "${it.first}: ${it.second}"}
         val headerJSON = JSONHeaderData(headers.toMap())
 
         val acceptValuePair = headers.find{it.first == "Accept"}.toString()
 
-        if (acceptValuePair.contains("json")) {
+        if (prefix != null) {
             val response = Response(OK)
-            headerLens.inject(headerJSON, response)
+            response.body(prefix.toString())
+//            stringHeaderLens.inject(headers.toString(), response)
+//            stringHeaderLens.inject(prefix, response)
+
+        } else if (acceptValuePair.contains("json")) {
+            val response = Response(OK)
+            jsonHeaderLens.inject(headerJSON, response)
 
         } else {
             Response(OK).body(headerString)
