@@ -21,6 +21,17 @@ val locale = Path.string().of("locale")
 data class JSONHeaderData(val headers: Map<String, String?>)
 val jsonHeaderLens = Body.auto<JSONHeaderData>().toLens()
 
+fun greetInLocale(locale: String, name: String): Response {
+    return when (locale) {
+        "en-US" -> Response(OK).body("Hello, $name")
+        "fr-FR" -> Response(OK).body("Bonjour $name")
+        "en-AU" -> Response(OK).body("G'day $name")
+        "it-IT" -> Response(OK).body("Salve $name")
+        "en-UK" -> Response(OK).body("Alright, $name?")
+        else ->  Response(OK).body("I don't know what language you speak but hello, $name")
+    }
+}
+
 val app: HttpHandler = routes(
     "/{locale}/hello" bind GET to { req ->
         val locale: String = locale(req)
@@ -29,14 +40,7 @@ val app: HttpHandler = routes(
         if (name.isNullOrEmpty()) {
             Response(OK).body("Hello")
         } else {
-            when (locale) {
-                "en-US" -> Response(OK).body("Hello, $name")
-                "fr-FR" -> Response(OK).body("Bonjour $name")
-                "en-AU" -> Response(OK).body("G'day $name")
-                "it-IT" -> Response(OK).body("Salve $name")
-                "en-UK" -> Response(OK).body("Alright, $name?")
-                else ->  Response(OK).body("I don't know what language you speak but hello, $name")
-            }
+            greetInLocale(locale, name)
         }
     },
     "/echo_headers" bind GET to { req ->
@@ -44,7 +48,7 @@ val app: HttpHandler = routes(
         val shortPrefix = fullPrefix?.first()
         val reqHeaderString = req.headers.joinToString("\n") { "${it.first}: ${it.second}"}
         val reqHeaderJSON = JSONHeaderData(req.headers.toMap())
-        val acceptValuePair = req.headers.find{it.first == "Accept"}.toString()
+        val acceptReqHeader = req.headers.find{it.first == "Accept"}.toString()
 
         if (fullPrefix != null) {
             val resHeaders = req.headers.map { (key, value) ->
@@ -56,7 +60,7 @@ val app: HttpHandler = routes(
             }
             Response(OK).body("").headers(resHeaders)
 
-        } else if (acceptValuePair.contains("json")) {
+        } else if (acceptReqHeader.contains("json")) {
             jsonHeaderLens.inject(reqHeaderJSON, Response(OK))
 
         } else {
