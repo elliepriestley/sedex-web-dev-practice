@@ -13,7 +13,7 @@ import org.http4k.server.SunHttp
 import org.http4k.server.asServer
 import org.http4k.core.Body
 import org.http4k.format.Jackson.auto
-import org.http4k.routing.header
+
 
 
 val optionalQuery = Query.string().optional("name")
@@ -40,17 +40,21 @@ val app: HttpHandler = routes(
         }
     },
     "/echo_headers" bind GET to { req ->
-        val prefix = Query.optional("as_response_headers_with_prefix").extract(req)?.substringAfter("=")
+        val fullPrefix = Query.optional("as_response_headers_with_prefix").extract(req)?.substringAfter("=")
+        val shortPrefix = fullPrefix?.first()
         val reqHeaderString = req.headers.joinToString("\n") { "${it.first}: ${it.second}"}
         val reqHeaderJSON = JSONHeaderData(req.headers.toMap())
-
         val acceptValuePair = req.headers.find{it.first == "Accept"}.toString()
 
-        if (prefix != null) {
-            val response = Response(OK).body("").headers(req.headers)
-            response
-
-
+        if (fullPrefix != null) {
+            val resHeaders = req.headers.map { (key, value) ->
+                if (key.startsWith(shortPrefix!!)) {
+                    "$fullPrefix$key" to value
+                } else {
+                    key to value
+                }
+            }
+            Response(OK).body("").headers(resHeaders)
 
         } else if (acceptValuePair.contains("json")) {
             jsonHeaderLens.inject(reqHeaderJSON, Response(OK))
