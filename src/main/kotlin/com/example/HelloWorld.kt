@@ -20,7 +20,6 @@ val optionalQuery = Query.string().optional("name")
 val locale = Path.string().of("locale")
 data class JSONHeaderData(val headers: Map<String, String?>)
 val jsonHeaderLens = Body.auto<JSONHeaderData>().toLens()
-val stringHeaderLens = Body.auto<String>().toLens()
 
 val app: HttpHandler = routes(
     "/{locale}/hello" bind GET to { req ->
@@ -42,8 +41,8 @@ val app: HttpHandler = routes(
     },
     "/echo_headers" bind GET to { req ->
         val prefix = Query.optional("as_response_headers_with_prefix").extract(req)?.substringAfter("=")
-        val headerString = req.headers.joinToString("\n") { "${it.first}: ${it.second}"}
-        val headerJSON = JSONHeaderData(req.headers.toMap())
+        val reqHeaderString = req.headers.joinToString("\n") { "${it.first}: ${it.second}"}
+        val reqHeaderJSON = JSONHeaderData(req.headers.toMap())
 
         val acceptValuePair = req.headers.find{it.first == "Accept"}.toString()
 
@@ -54,10 +53,10 @@ val app: HttpHandler = routes(
 
 
         } else if (acceptValuePair.contains("json")) {
-            jsonHeaderLens.inject(headerJSON, Response(OK))
+            jsonHeaderLens.inject(reqHeaderJSON, Response(OK))
 
         } else {
-            Response(OK).body(headerString)
+            Response(OK).body(reqHeaderString)
         }
 
     }
