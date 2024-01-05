@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.HelloWorldTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-01-04T17:29:18" hostname="Ellies-MBP" time="0.098">
+<testsuite name="com.example.HelloWorldTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2024-01-05T11:28:14" hostname="Ellies-MBP" time="0.277">
   <properties/>
-  <testcase name="Test that when echo_headers endpoint accepts a query param, request headers are echoed back as response headers but with given prefix attached to header name()" classname="com.example.HelloWorldTest" time="0.098"/>
+  <testcase name="Test that when echo_headers endpoint accepts a query param, request headers are echoed back as response headers but with given prefix attached to header name()" classname="com.example.HelloWorldTest" time="0.104"/>
+  <testcase name="Test that echo_headers endpoint returns json object when Accept heading contains json, and string object otherwise()" classname="com.example.HelloWorldTest" time="0.164"/>
+  <testcase name="Test that echo_headers endpoint returns list of all request headers in response()" classname="com.example.HelloWorldTest" time="0.001"/>
+  <testcase name="Test that endpoint has a path variable that responds with hello from supported languages()" classname="com.example.HelloWorldTest" time="0.002"/>
+  <testcase name="Test that in the case that the prefix is not null, echo_headers endpoint with a query parameter returns empty response body()" classname="com.example.HelloWorldTest" time="0.001"/>
+  <testcase name="Test that hello endpoint returns Hello when no name parameter is used()" classname="com.example.HelloWorldTest" time="0.001"/>
+  <testcase name="Test that hello endpoint accepts optional name param and uses it in response when available()" classname="com.example.HelloWorldTest" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

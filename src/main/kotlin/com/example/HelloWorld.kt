@@ -21,26 +21,28 @@ val locale = Path.string().of("locale")
 data class JSONHeaderData(val headers: Map<String, String?>)
 val jsonHeaderLens = Body.auto<JSONHeaderData>().toLens()
 
-fun greetInLocale(locale: String, name: String): Response {
-    return when (locale) {
+fun greetInLocale(language: String, name: String, req: Request): Response {
+    return when (language) {
         "en-US" -> Response(OK).body("Hello, $name")
         "fr-FR" -> Response(OK).body("Bonjour $name")
         "en-AU" -> Response(OK).body("G'day $name")
         "it-IT" -> Response(OK).body("Salve $name")
         "en-UK" -> Response(OK).body("Alright, $name?")
-        else ->  Response(OK).body("I don't know what language you speak but hello, $name")
+        else ->  Response(OK).body("I don't know what language you speak but hello, $name. language is $language").headers(req.headers)
     }
 }
 
 val app: HttpHandler = routes(
-    "/{locale}/hello" bind GET to { req ->
-        val locale: String = locale(req)
+    "/hello" bind GET to { req ->
         val name: String? = optionalQuery(req)
+        val language = req.headers.find{it.first == "Accept-language"}?.second.toString()
 
         if (name.isNullOrEmpty()) {
             Response(OK).body("Hello")
+        } else if (language == "null") {
+            Response(OK).body("Hi $name")
         } else {
-            greetInLocale(locale, name)
+            greetInLocale(language, name, req)
         }
     },
     "/echo_headers" bind GET to { req ->
