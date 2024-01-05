@@ -10,6 +10,7 @@ import org.http4k.core.Status.Companion.OK
 import org.http4k.hamkrest.hasHeader
 import org.http4k.hamkrest.hasStatus
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 
@@ -17,17 +18,18 @@ class HelloWorldTest {
 
     @Test
     fun `Test that hello endpoint returns Hello when no name parameter is used`() {
-        assertEquals(Response(OK).body("Hello"), app(Request(GET, "/en-US/hello")))
+        assertEquals(Response(OK).body("Hello"), app(Request(GET, "/hello")))
     }
 
     @Test
     fun `Test that hello endpoint accepts optional name param and uses it in response when available`() {
-        assertEquals(Response(OK).body("Hello, Ellie"), app(Request(GET, "/en-US/hello?name=Ellie")))
-        assertEquals(Response(OK).body("Hello, Leah"), app(Request(GET, "/en-US/hello?name=Leah")))
-        assertEquals(Response(OK).body("Hello, Alice"), app(Request(GET, "/en-US/hello?name=Alice")))
+        assertEquals(Response(OK).body("Hi Ellie"), app(Request(GET, "/hello?name=Ellie")))
+        assertEquals(Response(OK).body("Hi Leah"), app(Request(GET, "/hello?name=Leah")))
+        assertEquals(Response(OK).body("Hi Alice"), app(Request(GET, "/hello?name=Alice")))
 
     }
 
+    @Disabled // no longer relevant - hello endpoint now reads Accept-Language header instead
     @Test
     fun `Test that endpoint has a path variable that responds with hello from supported languages`() {
         assertEquals(Response(OK).body("Hello, Ellie"), app(Request(GET, "/en-US/hello?name=Ellie")))
