@@ -7,6 +7,7 @@ import org.http4k.core.Method.GET
 import org.http4k.core.Request
 import org.http4k.core.Response
 import org.http4k.core.Status.Companion.OK
+import org.http4k.hamkrest.hasBody
 import org.http4k.hamkrest.hasHeader
 import org.http4k.hamkrest.hasStatus
 import org.junit.jupiter.api.Assertions.*
@@ -116,8 +117,43 @@ class HelloWorldTest {
         assertThat(actualResponse, hasStatus(OK)
             .and(hasHeader("X-Echo-X-Custom-Header", "some x value"))
             .and(!hasHeader("X-Echo-Y-Custom-Header")))
-
     }
+
+    @Test
+    fun `Test that hello endpoint reads the Accept_language header and response in the appropriate language when name query param is provided`() {
+        val requestThatAcceptsBritishEnglish = Request(GET, "http://localhost:9000/hello?name=Ellie")
+            .header("Accept-language", "en-GB")
+        val requestThatAcceptsAustralianEnglish = Request(GET, "http://localhost:9000/hello?name=Ellie")
+            .header("Accept-language", "en-AU")
+        val requestThatAcceptsAmericanEnglish = Request(GET, "http://localhost:9000/hello?name=Ellie")
+            .header("Accept-language", "en-US")
+        val requestThatAcceptsItalian = Request(GET, "http://localhost:9000/hello?name=Ellie")
+            .header("Accept-language", "it-IT")
+        val requestThatAcceptsFrench = Request(GET, "http://localhost:9000/hello?name=Ellie")
+            .header("Accept-language", "fr-FR")
+        val requestWithDefaultLanguage = Request(GET, "http://localhost:9000/hello?name=Ellie")
+
+        assertThat(app(requestThatAcceptsBritishEnglish), hasStatus(OK)
+            .and(hasBody("Alright, Ellie?")))
+
+        assertThat(app(requestThatAcceptsAustralianEnglish), hasStatus(OK)
+            .and(hasBody("G'day Ellie")))
+
+        assertThat(app(requestThatAcceptsAmericanEnglish), hasStatus(OK)
+            .and(hasBody("Hello Ellie")))
+
+        assertThat(app(requestThatAcceptsItalian), hasStatus(OK)
+            .and(hasBody("Salve Ellie")))
+
+        assertThat(app(requestThatAcceptsFrench), hasStatus(OK)
+            .and(hasBody("Bonjour Ellie")))
+
+        assertThat(app(requestWithDefaultLanguage), hasStatus(OK)
+            .and(hasBody("Hi Ellie")))
+    }
+
+    // what if multiple languages are permitted?
+    // need to change it so that it is still language specific even when name is not provided.
 
 
 
