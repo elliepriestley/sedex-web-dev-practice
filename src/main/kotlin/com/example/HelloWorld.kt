@@ -17,18 +17,20 @@ import org.http4k.format.Jackson.auto
 
 
 val optionalQuery = Query.string().optional("name")
-val locale = Path.string().of("locale")
 data class JSONHeaderData(val headers: Map<String, String?>)
 val jsonHeaderLens = Body.auto<JSONHeaderData>().toLens()
 
-fun greetInLocale(language: String, name: String): Response {
+fun greetInLocale(language: String, name: String?): Response {
     return when (language) {
-        "en-US" -> Response(OK).body("Hello $name")
-        "fr-FR" -> Response(OK).body("Bonjour $name")
-        "en-AU" -> Response(OK).body("G'day $name")
-        "it-IT" -> Response(OK).body("Salve $name")
-        "en-GB" -> Response(OK).body("Alright, $name?")
-        else ->  Response(OK).body("I don't know what language you speak but hello, $name. language is $language")
+        "en-US" -> Response(OK).body(if (name == null) "Hello" else "Hello, $name")
+        "fr-FR" -> Response(OK).body(if (name == null) "Bonjour" else "Bonjour $name")
+        "en-AU" -> Response(OK).body(if (name == null) "G'day" else "G'day $name")
+        "it-IT" -> Response(OK).body(if (name == null) "Salve" else "Salve $name")
+        "en-GB" -> Response(OK).body(if (name == null) "Alright?" else "Alright, $name?")
+        "null" -> Response(OK).body(if (name == null) "Hi" else "Hi $name")
+        else ->  Response(OK).body(if (name == null) {
+            "I don't know what language you speak but hello"
+        } else "I don't know what language you speak but hello, $name")
     }
 }
 
@@ -37,13 +39,8 @@ val app: HttpHandler = routes(
         val name: String? = optionalQuery(req)
         val language = req.headers.find{it.first == "Accept-language"}?.second.toString()
 
-        if (name.isNullOrEmpty()) {
-            Response(OK).body("Hello")
-        } else if (language == "null") {
-            Response(OK).body("Hi $name")
-        } else {
-            greetInLocale(language, name)
-        }
+        greetInLocale(language, name)
+
     },
     "/echo_headers" bind GET to { req ->
         val fullPrefix = Query.optional("as_response_headers_with_prefix").extract(req)?.substringAfter("=")

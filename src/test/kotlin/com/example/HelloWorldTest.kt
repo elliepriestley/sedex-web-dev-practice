@@ -19,7 +19,7 @@ class HelloWorldTest {
 
     @Test
     fun `Test that hello endpoint returns Hello when no name parameter is used`() {
-        assertEquals(Response(OK).body("Hello"), app(Request(GET, "/hello")))
+        assertEquals(Response(OK).body("Hi"), app(Request(GET, "/hello")))
     }
 
     @Test
@@ -140,7 +140,7 @@ class HelloWorldTest {
             .and(hasBody("G'day Ellie")))
 
         assertThat(app(requestThatAcceptsAmericanEnglish), hasStatus(OK)
-            .and(hasBody("Hello Ellie")))
+            .and(hasBody("Hello, Ellie")))
 
         assertThat(app(requestThatAcceptsItalian), hasStatus(OK)
             .and(hasBody("Salve Ellie")))
@@ -155,6 +155,37 @@ class HelloWorldTest {
     // what if multiple languages are permitted?
     // need to change it so that it is still language specific even when name is not provided.
 
+    @Test
+    fun `Test that hello endpoint reads the Accept_language header and response in the appropriate language when name query param is not provided`() {
+        val requestThatAcceptsBritishEnglish = Request(GET, "http://localhost:9000/hello")
+            .header("Accept-language", "en-GB")
+        val requestThatAcceptsAustralianEnglish = Request(GET, "http://localhost:9000/hello")
+            .header("Accept-language", "en-AU")
+        val requestThatAcceptsAmericanEnglish = Request(GET, "http://localhost:9000/hello")
+            .header("Accept-language", "en-US")
+        val requestThatAcceptsItalian = Request(GET, "http://localhost:9000/hello")
+            .header("Accept-language", "it-IT")
+        val requestThatAcceptsFrench = Request(GET, "http://localhost:9000/hello")
+            .header("Accept-language", "fr-FR")
+        val requestWithDefaultLanguage = Request(GET, "http://localhost:9000/hello")
 
+        assertThat(app(requestThatAcceptsBritishEnglish), hasStatus(OK)
+            .and(hasBody("Alright?")))
+
+        assertThat(app(requestThatAcceptsAustralianEnglish), hasStatus(OK)
+            .and(hasBody("G'day")))
+
+        assertThat(app(requestThatAcceptsAmericanEnglish), hasStatus(OK)
+            .and(hasBody("Hello")))
+
+        assertThat(app(requestThatAcceptsItalian), hasStatus(OK)
+            .and(hasBody("Salve")))
+
+        assertThat(app(requestThatAcceptsFrench), hasStatus(OK)
+            .and(hasBody("Bonjour")))
+
+        assertThat(app(requestWithDefaultLanguage), hasStatus(OK)
+            .and(hasBody("Hi")))
+    }
 
 }
