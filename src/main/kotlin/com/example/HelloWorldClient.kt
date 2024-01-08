@@ -8,11 +8,18 @@ import org.http4k.core.Response
 import org.http4k.core.then
 import org.http4k.filter.DebuggingFilters.PrintResponse
 
-class HelloWorldClient {
+class HelloWorldClient constructor(baseURL: String) {
+    val baseURL = baseURL
+
+
     // initializes with a base url
 
-    fun hello() {
-        TODO()
+    fun hello(): Response {
+
+
+
+//        return "Hi"
+        return app(Request(GET, baseURL + "/hello"))
         // accepts optional name param
         // accepts language to act as a parameter in Accept_Language header
     }
@@ -29,10 +36,15 @@ class HelloWorldClient {
 
 
 fun main() {
-    // val client: HttpHandler = JavaHttpClient()
+
+// val client: HttpHandler = JavaHttpClient()
 
 //    val printingClient: HttpHandler = PrintResponse().then(client)
 
 //    val response: Response = printingClient(Request(GET, "http://localhost:9000/hello"))
+
+    val client = HelloWorldClient("http://localhost:9000/")
+
+    println(client.hello())
 
 }

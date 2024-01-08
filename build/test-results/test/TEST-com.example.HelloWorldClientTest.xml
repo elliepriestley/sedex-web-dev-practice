@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.example.HelloWorldClientTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-01-08T13:43:10" hostname="Ellies-MBP" time="0.095">
+  <properties/>
+  <testcase name="Test that client function hello returns Hi when there is no name param or language param provided()" classname="com.example.HelloWorldClientTest" time="0.095"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
