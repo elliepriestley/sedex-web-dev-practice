@@ -1,12 +1,8 @@
 package com.example
 
-import org.http4k.client.JavaHttpClient
-import org.http4k.core.HttpHandler
 import org.http4k.core.Method.GET
 import org.http4k.core.Request
 import org.http4k.core.Response
-import org.http4k.core.then
-import org.http4k.filter.DebuggingFilters.PrintResponse
 
 class HelloWorldClient (baseURL: String) {
     val baseURL = baseURL
@@ -16,9 +12,7 @@ class HelloWorldClient (baseURL: String) {
 
         val request: Request = Request(GET, requestURL).header("Accept-language", language)
 
-        val response = app(request)
-
-        return response
+        return app(request)
 
 
         // accepts optional name param

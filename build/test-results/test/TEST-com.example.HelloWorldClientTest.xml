@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.HelloWorldClientTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2024-01-08T15:27:47" hostname="Ellies-MBP" time="0.109">
+<testsuite name="com.example.HelloWorldClientTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2024-01-08T17:19:09" hostname="Ellies-MBP" time="0.113">
   <properties/>
-  <testcase name="Test that client function hello returns a greeting in appropriate language, without name parameter()" classname="com.example.HelloWorldClientTest" time="0.106"/>
+  <testcase name="Test that client function hello returns hello in appropriate language, with correct name param()" classname="com.example.HelloWorldClientTest" time="0.109"/>
+  <testcase name="Test that client function hello returns a greeting in appropriate language, without name parameter()" classname="com.example.HelloWorldClientTest" time="0.001"/>
   <testcase name="Test that client function hello returns Hi name when name parameter is provided()" classname="com.example.HelloWorldClientTest" time="0.001"/>
   <testcase name="Test that client function hello returns Hi when there is no name param or language param provided()" classname="com.example.HelloWorldClientTest" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
