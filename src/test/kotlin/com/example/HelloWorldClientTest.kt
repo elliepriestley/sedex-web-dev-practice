@@ -15,6 +15,14 @@ class HelloWorldClientTest {
     }
 
     // test that client.hello returns Hello with different name params
+    @Test
+    fun `Test that client function hello returns Hi name when name parameter is provided`() {
+        val client = HelloWorldClient("http://localhost:9000")
+        assertEquals(client.hello(name="Ellie").bodyString(), "Hi Ellie")
+        assertEquals(client.hello(name="Alice").bodyString(), "Hi Alice")
+        assertEquals(client.hello(name="Leah").bodyString(), "Hi Leah")
+
+    }
 
     // test that client.hello returns Hello in appropriate languages without name param
 

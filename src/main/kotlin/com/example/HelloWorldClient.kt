@@ -14,12 +14,11 @@ class HelloWorldClient constructor(baseURL: String) {
 
     // initializes with a base url
 
-    fun hello(): Response {
+    fun hello(name: String? = null): Response {
+        val requestURL: String = "${baseURL}/hello${if (name != null) "?name=$name" else ""}"
+        return app(Request(GET, requestURL))
 
 
-
-//        return "Hi"
-        return app(Request(GET, baseURL + "/hello"))
         // accepts optional name param
         // accepts language to act as a parameter in Accept_Language header
     }
