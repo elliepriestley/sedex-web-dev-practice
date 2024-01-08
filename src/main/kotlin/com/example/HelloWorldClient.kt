@@ -8,19 +8,21 @@ import org.http4k.core.Response
 import org.http4k.core.then
 import org.http4k.filter.DebuggingFilters.PrintResponse
 
-class HelloWorldClient constructor(baseURL: String) {
+class HelloWorldClient (baseURL: String) {
     val baseURL = baseURL
 
+    fun hello(name: String? = null, language: String? = null): Response {
+        val requestURL = "${baseURL}/hello${if (name != null) "?name=$name" else ""}"
 
-    // initializes with a base url
+        val request: Request = Request(GET, requestURL).header("Accept-language", language)
 
-    fun hello(name: String? = null): Response {
-        val requestURL: String = "${baseURL}/hello${if (name != null) "?name=$name" else ""}"
-        return app(Request(GET, requestURL))
+        val response = app(request)
+
+        return response
 
 
         // accepts optional name param
-        // accepts language to act as a parameter in Accept_Language header
+
     }
 
     fun echoHeaders() {
