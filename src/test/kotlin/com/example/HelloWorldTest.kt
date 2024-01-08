@@ -153,7 +153,6 @@ class HelloWorldTest {
     }
 
     // what if multiple languages are permitted?
-    // need to change it so that it is still language specific even when name is not provided.
 
     @Test
     fun `Test that hello endpoint reads the Accept_language header and response in the appropriate language when name query param is not provided`() {

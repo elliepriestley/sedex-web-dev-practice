@@ -4,7 +4,6 @@ import org.http4k.core.*
 import org.http4k.core.Method.GET
 import org.http4k.core.Status.Companion.OK
 import org.http4k.lens.Query
-import org.http4k.lens.Path
 import org.http4k.lens.string
 import org.http4k.filter.DebuggingFilters.PrintRequest
 import org.http4k.routing.bind
