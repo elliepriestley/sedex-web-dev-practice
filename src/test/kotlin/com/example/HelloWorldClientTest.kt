@@ -50,9 +50,18 @@ class HelloWorldClientTest {
         assertEquals( "Alright, Jules?", client.hello(name="Jules", language="en-GB").bodyString())
     }
 
-
-
     // test that client.echo_headers returns list of request headers as response body
+    @Test
+    fun `Test that client function echoHeadersAsString returns a string of request headers as response body`() {
+        val client = HelloWorldClient("http://localhost:9000")
+        val actual = client.echoHeadersAsString(listOf(Pair("Some X Header" , "some x value"), Pair("Some Y Header", "some y value")))
+
+        assertEquals("Some X Header: some x value\nSome Y Header: some y value", actual)
+    }
+
+
+
+
 
     // test that client.echo_headers returns in json when json param specified
 
