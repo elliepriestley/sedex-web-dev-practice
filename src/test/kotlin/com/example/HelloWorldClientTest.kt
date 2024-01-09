@@ -1,6 +1,11 @@
 package com.example
 
+
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.natpryce.hamkrest.assertion.assertThat
+import org.http4k.format.Json
+import org.http4k.format.JsonType
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Disabled
@@ -57,6 +62,20 @@ class HelloWorldClientTest {
         val actual = client.echoHeadersAsString(listOf(Pair("Some X Header" , "some x value"), Pair("Some Y Header", "some y value")))
 
         assertEquals("Some X Header: some x value\nSome Y Header: some y value", actual)
+    }
+
+    @Test
+    fun `Test that client function echoHeadersAsJson returns a json of request headers as response body`() {
+        val client = HelloWorldClient("http://localhost:9000")
+        val actual: JsonNode = client.echoHeadersAsJson(listOf(Pair("Some X Header" , "some x value"), Pair("Some Y Header", "some y value")))
+
+//        assert(actual)
+//        val objectMapper = ObjectMapper()
+//        val jsonObject = objectMapper(actual, Map::class.java)
+        assertNotNull(actual)
+
+        // There must be a way of testing this? How can I assert the response body is a json object?
+        //
     }
 
 
