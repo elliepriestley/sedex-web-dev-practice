@@ -23,6 +23,8 @@ class HelloWorldClient (baseURL: String) {
 
     }
 
+
+
     fun echoHeadersAsString(headersList: List<Pair<String , String>>?): String {
         val requestURL = "$baseURL/echo_headers"
         var request = Request(GET, requestURL)
@@ -54,6 +56,10 @@ class HelloWorldClient (baseURL: String) {
 
     // Does this not just do the work of the handler if it converts the body string into the json object?
 
+    }
+
+    fun addPrefix(prefix: String): Response {
+        TODO()
     }
 
 }

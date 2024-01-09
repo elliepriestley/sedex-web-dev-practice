@@ -42,19 +42,14 @@ val app: HttpHandler = routes(
 
     },
     "/echo_headers" bind GET to { req ->
-        val fullPrefix = Query.optional("as_response_headers_with_prefix").extract(req)?.substringAfter("=")
-        val shortPrefix = fullPrefix?.first()
+        val prefix = Query.optional("as_response_headers_with_prefix").extract(req)?.substringAfter("=")
         val reqHeaderString = req.headers.joinToString("\n") { "${it.first}: ${it.second}"}
         val reqHeaderJSON = JSONHeaderData(req.headers.toMap())
         val acceptReqHeader = req.headers.find{it.first == "Accept"}.toString()
 
-        if (fullPrefix != null) {
+        if (prefix != null) {
             val resHeaders = req.headers.map { (key, value) ->
-                if (key.startsWith(shortPrefix!!)) {
-                    "$fullPrefix$key" to value
-                } else {
-                    key to value
-                }
+                    "$prefix$key" to value
             }
             Response(OK).body("").headers(resHeaders)
 

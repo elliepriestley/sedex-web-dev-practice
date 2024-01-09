@@ -108,7 +108,7 @@ class HelloWorldTest {
     }
 
     @Test
-    fun `Test that when echo_headers endpoint accepts a query param, request headers are echoed back as response headers but with given prefix attached to header name`() {
+    fun `Test that when echo_headers endpoint accepts a query param, all request headers are echoed back as response headers but with given prefix attached to header name`() {
         val requestWithHeaders = Request(GET, "http://localhost:9000/echo_headers?as_response_headers_with_prefix=X-Echo-")
             .header("X-Custom-Header", "some x value")
             .header("Y-Custom-Header", "some y value")
@@ -117,7 +117,7 @@ class HelloWorldTest {
 
         assertThat(actualResponse, hasStatus(OK)
             .and(hasHeader("X-Echo-X-Custom-Header", "some x value"))
-            .and(!hasHeader("X-Echo-Y-Custom-Header")))
+            .and(hasHeader("X-Echo-Y-Custom-Header")))
     }
 
     @Test
