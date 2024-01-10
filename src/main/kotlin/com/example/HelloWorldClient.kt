@@ -53,7 +53,8 @@ fun main() {
     val headersAcceptJson = listOf(Pair("X-Header", "x value"), Pair("Y-Header", "y value"), Pair("Accept", "application/json"))
 //    println(client.echoHeaders(headers))
 //    println(client.echoHeaders(headersAcceptJson))
-    println(client.echoHeaders(headers, "PREFIX"))
+    println(client.echoHeaders(headers, "PREFIX-"))
+//    println(client.echoHeaders(listOf(Pair("Some-X-Header", "some x value"), Pair("Some-Y-Header", "some y value"))))
 
 
 
