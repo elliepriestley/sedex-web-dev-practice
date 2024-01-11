@@ -1,16 +1,14 @@
 package com.example
 
-import com.fasterxml.jackson.databind.JsonNode
+
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import org.http4k.client.JavaHttpClient
-import org.http4k.core.HttpHandler
 import org.http4k.core.Method.GET
 import org.http4k.core.Request
-import org.http4k.core.Response
-import org.http4k.format.Jackson.asJsonObject
 
 class HelloWorldClient (val baseURL: String){
     private val client = JavaHttpClient.invoke()
-
 
     fun sayHello(name: String? = null, language: String? = null): String {
         val requestURL = "$baseURL/hello${if (name != null) "?name=$name" else ""}"
@@ -18,22 +16,43 @@ class HelloWorldClient (val baseURL: String){
         return client(request).bodyString()
     }
 
-    fun echoHeaders(headerList: List<Pair<String, String>>, prefix:String? = null): String {
+    fun echoHeaders(headerList: List<Pair<String, String>>, prefix:String? = null): Map<String, String?> {
         val requestURL = "$baseURL/echo_headers${if (prefix != null) "?as_response_headers_with_prefix=$prefix" else "" }"
         var request = Request(GET, requestURL)
         headerList.forEach { (key, value) ->
             request = request.header(key, value)
         }
         return if (prefix != null) {
-            client(request).headers.toString()
+            client(request).headers.toMap()
+
         } else {
-            client(request).bodyString()
+            val headers = client(request).bodyString()
+            // Has to be a better way of figuring out if it's a json or not below
+            if(headers.startsWith("""{"headers"""")) {
+                return turnJsonStringIntoMap(headers)
+            } else {
+                return turnStringIntoMap(headers)
+            }
+
         }
 
     }
 
+    private fun turnStringIntoMap(headerString: String): Map<String, String> {
+        val listHeader =  headerString.split("\n")
+        val map = listHeader.associate {element ->
+            val pair = element.split(":")
+            pair.first() to pair.last()
+        }
+        return map
+    }
 
-
+    private fun turnJsonStringIntoMap(jsonString: String): Map<String, String> {
+        val mapper = jacksonObjectMapper()
+        val parsedMap: Map<String, Any> = mapper.readValue(jsonString)
+        val headersMap = parsedMap["headers"] as Map<String, String>
+        return headersMap
+    }
 
 
 }
@@ -52,15 +71,10 @@ fun main() {
 
     // Testing the echoHeaders function
 
-//        val headers = listOf(Pair("X-Header", "x value"), Pair("Y-Header", "y value"))
-//        val headersAcceptJson = listOf(Pair("X-Header", "x value"), Pair("Y-Header", "y value"), Pair("Accept", "application/json"))
-//            println(client.echoHeaders(headers))
-//            println(client.echoHeaders(headersAcceptJson))
-//            println(client.echoHeaders(headers, "PREFIX-"))
-
-
-
-
-
+        val headers = listOf(Pair("X-Header", "x value"), Pair("Y-Header", "y value"))
+        val headersAcceptJson = listOf(Pair("X-Header", "x value"), Pair("Y-Header", "y value"), Pair("Accept", "application/json"))
+            println(client.echoHeaders(headers))
+            println(client.echoHeaders(headersAcceptJson))
+            println(client.echoHeaders(headers, "PREFIX-"))
 
 }
