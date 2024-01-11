@@ -8,10 +8,8 @@ import org.http4k.core.Request
 import org.http4k.core.Response
 import org.http4k.format.Jackson.asJsonObject
 
-class HelloWorldClient (baseURL: String){
-    val baseURL = baseURL
-    private val client: HttpHandler = JavaHttpClient()
-
+class HelloWorldClient (val baseURL: String){
+    private val client = JavaHttpClient.invoke()
 
 
     fun sayHello(name: String? = null, language: String? = null): String {
@@ -45,16 +43,21 @@ class HelloWorldClient (baseURL: String){
 fun main() {
 
     val client = HelloWorldClient("http://localhost:3000")
-//    println(client.sayHello())
-//    println(client.sayHello(name="Ellie"))
-//    println(client.sayHello(name="Ellie", language = "en-GB"))
-//    println(client.sayHello(language = "fr-FR"))
-    val headers = listOf(Pair("X-Header", "x value"), Pair("Y-Header", "y value"))
-    val headersAcceptJson = listOf(Pair("X-Header", "x value"), Pair("Y-Header", "y value"), Pair("Accept", "application/json"))
-//    println(client.echoHeaders(headers))
-//    println(client.echoHeaders(headersAcceptJson))
-    println(client.echoHeaders(headers, "PREFIX-"))
-//    println(client.echoHeaders(listOf(Pair("Some-X-Header", "some x value"), Pair("Some-Y-Header", "some y value"))))
+
+    // Testing the sayHello function
+//            println(client.sayHello())
+//            println(client.sayHello(name="Ellie"))
+//            println(client.sayHello(name="Ellie", language = "en-GB"))
+//            println(client.sayHello(language = "fr-FR"))
+
+    // Testing the echoHeaders function
+
+//        val headers = listOf(Pair("X-Header", "x value"), Pair("Y-Header", "y value"))
+//        val headersAcceptJson = listOf(Pair("X-Header", "x value"), Pair("Y-Header", "y value"), Pair("Accept", "application/json"))
+//            println(client.echoHeaders(headers))
+//            println(client.echoHeaders(headersAcceptJson))
+//            println(client.echoHeaders(headers, "PREFIX-"))
+
 
 
 
